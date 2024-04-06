@@ -15,17 +15,15 @@ struct Navigator: View {
     var body: some View {
         AppScaffold{
             navController.show(destination: .mainScreen){ _ in
-                ViewModelModule.inject.moviesMainViewModel
+                ViewModelModule.inject.moviesMain()
             }
             .navigationDestination(for: Destination.self) { destination in
                 navController.show(destination: destination){args in
-                    ViewModelModule.inject.movieDetailViewModel(args as! Int)
+                    ViewModelModule.inject.movieDetail(movieId: args as! Int)
                 }.navigationBarHidden(true)
             }
-        }
-        .environmentObject(navController)
+        }.environmentObject(navController)
     }
-    
 }
 
 #Preview {

@@ -12,19 +12,21 @@ class ViewModelModule {
     
     static let inject: ViewModelModule = ViewModelModule()
     
-    lazy var movieDetailViewModel: (Int) -> MovieDetailViewModel = { [unowned self] id in
-        print("creating viewModel")
-        return MovieDetailViewModel(
-            id: id,
+    private init() {
+    }
+    
+    func moviesMain() -> MoviesMainViewModel {
+        return MoviesMainViewModel(getMoviesUseCase: UseCasesModule.inject.getMoviesUseCase)
+    }
+    
+    
+    func movieDetail(movieId: Int) -> MovieDetailViewModel {
+        return  MovieDetailViewModel(
+            id: movieId,
             getMovieDetailsUseCase: UseCasesModule.inject.getMovieDetailUseCase,
             getMovieImagesUseCase: UseCasesModule.inject.getMoviesImagesUseCase,
             getMoviesRecommendationsUseCase: UseCasesModule.inject.getMovieRecommendationsUseCase
         )
     }
-    
-    lazy var moviesMainViewModel: MoviesMainViewModel = MoviesMainViewModel(getMoviesUseCase: UseCasesModule.inject.getMoviesUseCase)
-    
-    private init() {
-    }
-    
 }
+

@@ -11,6 +11,7 @@ import Foundation
 class AppModule {
     
     static let inject: AppModule = AppModule()
+    
     private var remote: MoviesDataSource
     var repository: MoviesRepository
     

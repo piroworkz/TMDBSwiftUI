@@ -27,13 +27,6 @@ class RequestBuilder{
         return request
     }
     
-    
-    
-    private func createURL() -> URL? {
-        let url = URL(string: APIConstants.baseUrl)
-        return url
-    }
-    
     private func configBaseUrl(endpoint: String) -> URL? {
         var components = URLComponents()
         components.path = endpoint
@@ -45,4 +38,10 @@ class RequestBuilder{
         
         return finalUrl
     }
+    
+    private func createURL() -> URL? {
+        let url = URL(string: APIConstants.baseUrl)
+        return url
+    }
+    
 }

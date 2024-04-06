@@ -11,7 +11,7 @@ extension RemoteMovie {
     func toDomain() -> Movie {
         Movie(
             id: self.id,
-            posterPath: self.poster_path.buildPath(),
+            posterPath: self.poster_path.buildThumbPath(),
             title: self.title .orEmpty()
         )
     }
@@ -22,7 +22,7 @@ extension RemoteMovieDetail {
     func toDomain() -> MovieDetail {
         MovieDetail(
             adult: self.adult,
-            backdropPath: self.backdrop_path.buildPath(),
+            backdropPath: self.backdrop_path.buildThumbPath(),
             homepage: self.homepage.orEmpty(),
             id: self.id,
             originalLanguage: self.original_language,

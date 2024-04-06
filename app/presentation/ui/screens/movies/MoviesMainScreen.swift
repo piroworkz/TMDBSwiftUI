@@ -10,7 +10,7 @@ import SwiftUI
 struct MoviesMainScreen: View {
     
     @StateObject
-    var viewModel: MoviesMainViewModel = ViewModelModule.inject.moviesMainViewModel
+    var viewModel: MoviesMainViewModel
     
     @EnvironmentObject
     var navController: NavController
@@ -46,10 +46,4 @@ struct MoviesMainScreen: View {
         }
     }
     
-}
-
-#Preview {
-    ZStack {
-        MoviesMainScreen()
-    }.environmentObject(NavController.shared)
 }

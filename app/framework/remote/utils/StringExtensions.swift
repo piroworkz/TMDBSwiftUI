@@ -8,7 +8,7 @@
 import Foundation
 
 extension String? {
-    func buildPath() -> String {
+    func buildThumbPath() -> String {
         guard let path = self else { return "" }
        return "https://image.tmdb.org/t/p/w185\(path)"
     }
