@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum Destination: Hashable, Codable {
-    case mainScreen
-    case detailScreen(movieId: Int)
+enum Destination: Hashable {
+    case MainScreen
+    case DetailScreen(id: Int)
 }

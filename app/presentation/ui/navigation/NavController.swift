@@ -12,22 +12,22 @@ class NavController: ObservableObject {
     static let shared: NavController = NavController()
     
     @Published
-    var path = NavigationPath()
+    var destinations = [Destination]()
     
     @Published
-    var toolbarState: ToolbarState
+    var toolbarState: ToolbarState  = ToolbarState(title: "TMDB APP")
     
     private init() {
-        self.toolbarState = ToolbarState(title: "TMDB APP")
     }
     
     func navigateTo(destination: Destination) {
-        path.append(destination)
+        destinations.append(destination)
+        print("After append: \(destinations)")
     }
     
     func popBackStack() {
-        path.removeLast()
-        if path.isEmpty {
+        destinations.removeLast()
+        if destinations.isEmpty {
             update(toolbarState: ToolbarState(title: "TMDB APP"))
         }
     }
@@ -39,9 +39,9 @@ class NavController: ObservableObject {
     @ViewBuilder
     func show<T: ViewModel>(destination: Destination, inject: @escaping (_ args: Any?) -> T) -> some View {
         switch destination {
-        case .mainScreen:
+        case .MainScreen :
             MoviesMainScreen(viewModel: inject(nil) as! MoviesMainViewModel)
-        case .detailScreen(let movieId):
+        case .DetailScreen(let movieId):
             MovieDetailScreen(viewModel: inject(movieId) as! MovieDetailViewModel)
         }
     }

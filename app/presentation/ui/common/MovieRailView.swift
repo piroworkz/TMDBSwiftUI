@@ -34,7 +34,9 @@ func MovieGridItem(_ movie: Movie, navController: NavController) -> some View {
                 case .empty:
                     placeholder
                 case .success(let image):
-                    image.resizable()
+                    image
+                        .resizable()
+                        .position(CGPoint(x: 80, y: 190))
                         .aspectRatio(contentMode: .fill)
                 case .failure(_):
                     placeholder
@@ -52,7 +54,7 @@ func MovieGridItem(_ movie: Movie, navController: NavController) -> some View {
         .frame(width: 160, height: 140)
         .clipped()
         .onTapGesture {
-            navController.navigateTo(destination: .detailScreen(movieId: movie.id))
+            navController.navigateTo(destination: .DetailScreen(id: movie.id))
         }
         Text(movie.title )
             .lineLimit(1)

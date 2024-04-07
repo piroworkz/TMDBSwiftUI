@@ -50,7 +50,6 @@ struct MovieDetailScreen: View {
         
     }
     
-    
     fileprivate func setAppBarTitle(){
         if let movie = viewModel.state.movie {
             navController.update(toolbarState: navController.toolbarState.copy(title: movie.title))
@@ -91,11 +90,11 @@ struct MovieDetailScreen: View {
     
     fileprivate func MovieInfoView(movie: MovieDetail) -> some View {
         return VStack(alignment: .leading){
-
+            
             Text(movie.overview)
                 .font(.system(size: 14))
                 .padding(EdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0))
-
+            
             LabeledContent("Release Date: "){
                 Text(movie.releaseDate)
                     .font(.system(size: 14))
