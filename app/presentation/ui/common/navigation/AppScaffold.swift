@@ -23,14 +23,13 @@ struct AppScaffold<V: View>: View {
         VStack(spacing: 0) {
             Toolbar()
             NavigationStack(
-                path: $navController.path,
+                path: $navController.destinations,
                 root: {
                     content
-                        .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
+                        .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 0))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-            )
-            .navigationBarHidden(true)
+            ).navigationBarHidden(true)
         }.background(.black)
     }
 }

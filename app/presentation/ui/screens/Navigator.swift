@@ -14,14 +14,15 @@ struct Navigator: View {
     
     var body: some View {
         AppScaffold{
-            navController.show(destination: .mainScreen){ _ in
+            navController.show(destination: .MainScreen){_ in
                 ViewModelModule.inject.moviesMain()
             }
             .navigationDestination(for: Destination.self) { destination in
-                navController.show(destination: destination){args in
-                    ViewModelModule.inject.movieDetail(movieId: args as! Int)
+                navController.show(destination: destination){movieId in
+                    ViewModelModule.inject.movieDetail(movieId: movieId as! Int)
                 }.navigationBarHidden(true)
             }
+            .navigationViewStyle(StackNavigationViewStyle())
         }.environmentObject(navController)
     }
 }

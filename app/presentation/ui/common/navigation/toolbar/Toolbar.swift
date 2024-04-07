@@ -15,11 +15,11 @@ struct Toolbar: View {
     var body: some View {
         HStack {
             Button(action: {
-                if !navController.path.isEmpty {
+                if !navController.destinations.isEmpty {
                     navController.popBackStack()
                 }
             }, label: {
-                Image(systemName: navController.path.isEmpty ? "line.3.horizontal" : "chevron.left")
+                Image(systemName: navController.destinations.isEmpty ? "line.3.horizontal" : "chevron.left")
                     .padding(.leading)
             })
             
