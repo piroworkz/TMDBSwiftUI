@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import domain
 
 
 extension MoviesMainViewModel.State: Updatable {

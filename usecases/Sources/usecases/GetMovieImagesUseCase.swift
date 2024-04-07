@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import domain
+import data
 
-
-class GetMovieImagesUseCase {
+public class GetMovieImagesUseCase {
     
     private let repository: MoviesRepository
     
-    init(repository: MoviesRepository) {
+    public init(repository: MoviesRepository) {
         self.repository = repository
     }
     
-    func execute(by id: Int, completionHandler: @escaping (Result<[Poster], AppError>) -> Void) {
+    public func execute(by id: Int, completionHandler: @escaping (Result<[Poster], AppError>) -> Void) {
         repository.getMovieImages(by: id, completionHandler: completionHandler)
     }
     

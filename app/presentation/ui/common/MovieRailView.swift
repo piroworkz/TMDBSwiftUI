@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import domain
 
 func MovieRailView(_ movies: [Movie], navController: NavController) -> some View {
     return ScrollView(.horizontal){
@@ -46,7 +47,7 @@ func MovieGridItem(_ movie: Movie, navController: NavController) -> some View {
             Image("film_mask")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                
+            
         }
         .frame(width: 160, height: 140)
         .clipped()

@@ -8,17 +8,17 @@
 import Foundation
 
 
-enum AppError: Error {
+public enum AppError: Error {
     case networkError(message: String = AppError.COM_MESSAGE)
     case unknownError(message: String = AppError.COM_MESSAGE)
     case notAvailable(message: String = AppError.NOT_AVAILABLE)
     
-    static let COM_MESSAGE = "There was a communication error, please try again later."
-    static let NOT_AVAILABLE = "NO MOVIES AVAILABLE"
+    public static let COM_MESSAGE = "There was a communication error, please try again later."
+    public static let NOT_AVAILABLE = "NO MOVIES AVAILABLE"
 }
 
 
-extension Error {
+public extension Error {
     
     func toAppError() -> AppError {
         switch self {

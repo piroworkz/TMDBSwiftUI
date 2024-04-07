@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import domain
 
-protocol MoviesDataSource {
+public protocol MoviesDataSource {
     func getMovies(endpoint: String, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void)
     func getMovieDetails(by id: Int, completionHandler: @escaping(_ result: Result<MovieDetail, AppError>) -> Void)
     func getMovieImages(by id: Int, completionHandler: @escaping (Result<[Poster], AppError>) -> Void)

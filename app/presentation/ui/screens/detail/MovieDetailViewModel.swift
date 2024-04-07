@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import usecases
+import domain
 
 class MovieDetailViewModel: ViewModel {
     
