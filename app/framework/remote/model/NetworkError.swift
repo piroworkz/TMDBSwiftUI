@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import domain
 
 struct NetworkError: Codable {
     let statusCode: Int

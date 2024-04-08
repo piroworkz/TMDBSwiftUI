@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import domain
 
 struct MovieDetailScreen: View {
     

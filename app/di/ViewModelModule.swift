@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import usecases
 
 
 class ViewModelModule {
@@ -29,4 +30,3 @@ class ViewModelModule {
         )
     }
 }
-

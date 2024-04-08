@@ -6,16 +6,18 @@
 //
 
 import Foundation
+import domain
+import data
 
 
-class GetMovieRecommendationsUseCase {
+public class GetMovieRecommendationsUseCase {
     private let repository: MoviesRepository
     
-    init(repository: MoviesRepository) {
+    public init(repository: MoviesRepository) {
         self.repository = repository
     }
     
-    func execute(by id: Int, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
+    public func execute(by id: Int, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
         repository.getMovieRecommendations(by: id, completionHandler: completionHandler)
     }
     

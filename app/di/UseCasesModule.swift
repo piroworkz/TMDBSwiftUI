@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import usecases
 
 class UseCasesModule {
     

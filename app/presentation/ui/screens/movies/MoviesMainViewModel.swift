@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import domain
+import usecases
 
 class MoviesMainViewModel: ViewModel {
     private let getMoviesUseCase: GetMoviesUseCase
