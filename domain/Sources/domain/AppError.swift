@@ -5,9 +5,6 @@
 //  Created by David Luna on 31/03/24.
 //
 
-import Foundation
-
-
 public enum AppError: Error {
     case networkError(message: String = AppError.COM_MESSAGE)
     case unknownError(message: String = AppError.COM_MESSAGE)
@@ -23,7 +20,7 @@ public extension Error {
     func toAppError() -> AppError {
         switch self {
         default:
-                .networkError(message: self.localizedDescription)
+                .networkError()
         }
     }
 }

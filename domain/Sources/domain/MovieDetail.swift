@@ -5,8 +5,6 @@
 //  Created by David Luna on 02/04/24.
 //
 
-import Foundation
-
 public struct MovieDetail {
     public let adult: Bool
     public let backdropPath: String?

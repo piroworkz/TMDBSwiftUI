@@ -5,7 +5,6 @@
 //  Created by David Luna on 02/04/24.
 //
 
-import Foundation
 import domain
 
 public protocol MoviesDataSource {

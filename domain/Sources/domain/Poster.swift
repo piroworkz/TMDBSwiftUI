@@ -5,8 +5,6 @@
 //  Created by David Luna on 03/04/24.
 //
 
-import Foundation
-
 public struct Poster {
     public let path: String
     
