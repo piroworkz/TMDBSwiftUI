@@ -15,7 +15,12 @@ class ViewModelModule {
     }
     
     func moviesMain() -> MoviesMainViewModel {
-        return MoviesMainViewModel(getMoviesUseCase: UseCasesModule.inject.getMoviesUseCase)
+        return MoviesMainViewModel(
+            fetchMoviesUseCase: UseCasesModule.inject.fetchMoviesUseCase,
+            countMoviesUseCase: UseCasesModule.inject.countMoviesUSeCase,
+            getMoviesUseCase: UseCasesModule.inject.getMoviesUseCase,
+            insertMoviesUseCase: UseCasesModule.inject.insertMoviesUseCase
+        )
     }
     
     

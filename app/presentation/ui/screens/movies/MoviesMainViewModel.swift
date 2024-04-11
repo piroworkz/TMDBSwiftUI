@@ -10,37 +10,64 @@ import domain
 import usecases
 
 class MoviesMainViewModel: ViewModel {
+    private let fetchMoviesUseCase: FetchMoviesUseCase
+    private let countMoviesUseCase: CountMoviesUseCase
     private let getMoviesUseCase: GetMoviesUseCase
+    private let insertMoviesUseCase: InsertMoviesUseCase
     
     @Published
     var state: State = State()
     
-    init(getMoviesUseCase: GetMoviesUseCase) {
-        print("main vm init")
-        self.getMoviesUseCase = getMoviesUseCase
-        dataDownload()
-    }
+    init(
+        fetchMoviesUseCase: FetchMoviesUseCase,
+        countMoviesUseCase: CountMoviesUseCase,
+        getMoviesUseCase: GetMoviesUseCase,
+        insertMoviesUseCase: InsertMoviesUseCase) {
+            self.fetchMoviesUseCase = fetchMoviesUseCase
+            self.countMoviesUseCase = countMoviesUseCase
+            self.getMoviesUseCase = getMoviesUseCase
+            self.insertMoviesUseCase = insertMoviesUseCase
+            dataDownload()
+        }
     
     func sendEvent(event: MainScreenEvent) {
         switch event {
         case .onItemSelected(let itemId):
-            print("selected id: \(itemId)")
             state.update { s in s.copy(selectedId: itemId)}
         }
     }
     
     fileprivate func dataDownload(){
-        fetchPopularMovies()
-        fetchNowPlayingMovies()
-        fetchTopRatedMovies()
-        fetchUpcomingMovies()
+        countMovies(sortedAs: MoviesMainViewModel.POPULAR) { endpoint in
+            self.fetchPopularMovies(endpoint: endpoint)
+        }
+        countMovies(sortedAs: MoviesMainViewModel.NOW_PLAYING) { endpoint in
+            self.fetchNowPlayingMovies(endpoint: endpoint)
+        }
+        countMovies(sortedAs: MoviesMainViewModel.TOP_RATED) { endpoint in
+            self.fetchTopRatedMovies(endpoint: endpoint)
+        }
+        countMovies(sortedAs: MoviesMainViewModel.UPCOMING) { endpoint in
+            self.fetchUpcomingMovies(endpoint: endpoint)
+        }
     }
     
-    fileprivate func fetchPopularMovies() {
+    fileprivate func countMovies(sortedAs: String, ifEmpty: @escaping (String) -> Void){
+        countMoviesUseCase.execute(sortedAs: sortedAs) { result in
+            result.fold { count in
+                if count == 0 { ifEmpty(sortedAs) }
+            } onFailure: { appError in
+                self.state.update { s in s.copy(appError: appError)}
+            }
+            
+        }
+    }
+    
+    fileprivate func fetchPopularMovies(endpoint: String) {
         run {
-            getMoviesUseCase.execute(endpoint: "popular") { result in
+            fetchMoviesUseCase.execute(endpoint: endpoint) { result in
                 result.foldForPublish{  popularMovies in
-                    self.state.update { s in s.copy(popularMovies: popularMovies)}
+                    self.insertMovies(movies: popularMovies)
                 } onFailure: { appError in
                     self.state.update { s in s.copy(appError: appError)}
                 }
@@ -48,11 +75,11 @@ class MoviesMainViewModel: ViewModel {
         }
     }
     
-    fileprivate func fetchNowPlayingMovies() {
+    fileprivate func fetchNowPlayingMovies(endpoint: String) {
         run {
-            getMoviesUseCase.execute(endpoint: "now_playing") { result in
+            fetchMoviesUseCase.execute(endpoint: endpoint) { result in
                 result.foldForPublish{  nowPlayingMovies in
-                    self.state.update { s in s.copy(nowPlayingMovies: nowPlayingMovies)}
+                    self.insertMovies(movies: nowPlayingMovies)
                 } onFailure: { appError in
                     self.state.update { s in s.copy(appError: appError)}
                 }
@@ -61,11 +88,11 @@ class MoviesMainViewModel: ViewModel {
     }
     
     
-    private func fetchTopRatedMovies() {
+    private func fetchTopRatedMovies(endpoint: String) {
         run {
-            getMoviesUseCase.execute(endpoint: "top_rated") { result in
+            fetchMoviesUseCase.execute(endpoint: endpoint) { result in
                 result.foldForPublish{ topRatedMovies in
-                    self.state.update { s in s.copy(topRatedMovies: topRatedMovies)}
+                    self.insertMovies(movies: topRatedMovies)
                 } onFailure: { appError in
                     self.state.update { s in s.copy(appError: appError)}
                 }
@@ -73,15 +100,44 @@ class MoviesMainViewModel: ViewModel {
         }
     }
     
-    private func fetchUpcomingMovies() {
+    private func fetchUpcomingMovies(endpoint: String) {
         run {
-            getMoviesUseCase.execute(endpoint: "upcoming") { result in
+            fetchMoviesUseCase.execute(endpoint: endpoint) { result in
                 result.foldForPublish{  upcomingMovies in
-                    self.state.update { s in s.copy(upcomingMovies: upcomingMovies)}
+                    self.insertMovies(movies: upcomingMovies)
                 } onFailure: { appError in
                     self.state.update { s in s.copy(appError: appError)}
                 }
             }
+        }
+    }
+    
+    private func insertMovies(movies: [Movie]) {
+        insertMoviesUseCase.execute(movies: movies) { result in
+            result.fold { wasSaved in
+                if wasSaved {
+                    self.getMovies()
+                }
+            } onFailure: { appError in
+                self.state.update { s in s.copy(appError: appError)}
+            }
+            
+        }
+    }
+    
+    private func getMovies() {
+        getMoviesUseCase.execute { result in
+            result.fold { movies in
+                self.state.update { s in s.copy(
+                    popularMovies: movies.filter({ movie in movie.sortAs == MoviesMainViewModel.POPULAR }),
+                    nowPlayingMovies: movies.filter({ movie in movie.sortAs == MoviesMainViewModel.NOW_PLAYING }),
+                    topRatedMovies: movies.filter({ movie in movie.sortAs == MoviesMainViewModel.TOP_RATED }),
+                    upcomingMovies: movies.filter({ movie in movie.sortAs == MoviesMainViewModel.UPCOMING })
+                )}
+            } onFailure: { appError in
+                self.state.update { s in s.copy(appError: appError)}
+            }
+            
         }
     }
     
@@ -94,6 +150,12 @@ class MoviesMainViewModel: ViewModel {
             state.update { s in s.copy(loading: false, appError: error.toAppError()) }
         }
     }
+    
+    private static let POPULAR = "popular"
+    private static let NOW_PLAYING = "now_playing"
+    private static let TOP_RATED = "top_rated"
+    private static let UPCOMING = "upcoming"
+    
     
     struct State {
         let loading: Bool

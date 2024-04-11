@@ -8,14 +8,15 @@
 import data
 import domain
 
-public class GetMoviesUseCase {
+public class CountMoviesUseCase {
     private let repository: MoviesRepository
     
     public init(repository: MoviesRepository) {
         self.repository = repository
     }
     
-    public func execute(completionHandler: @escaping (Result<[Movie], AppError>) -> Void) {
-        repository.getMovies(completionHandler: completionHandler)
+    public func execute(sortedAs: String, completionHandler: @escaping (Result<Int, AppError>) -> Void) {
+        repository.countMovies(sortedAs: sortedAs, completionHandler: completionHandler)
     }
+    
 }

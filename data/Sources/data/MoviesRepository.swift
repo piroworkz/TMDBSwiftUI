@@ -8,14 +8,16 @@
 import domain
 
 public class MoviesRepository {
-    private let remote: MoviesDataSource
+    private let remote: MoviesRemoteDataSource
+    private let local: MoviesLocalDataSource
     
-    public init(remote: MoviesDataSource) {
+    public init(remote: MoviesRemoteDataSource, local: MoviesLocalDataSource) {
         self.remote = remote
+        self.local = local
     }
     
-    public func getMovies(endpoint: String, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
-        remote.getMovies(endpoint: endpoint, completionHandler: completionHandler)
+    public func fetchMovies(endpoint: String, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
+        remote.fectchMovies(endpoint: endpoint, completionHandler: completionHandler)
     }
     
     public func getMovieDetails(by id: Int, completionHandler: @escaping(_ result: Result<MovieDetail, AppError>) -> Void) {
@@ -29,5 +31,18 @@ public class MoviesRepository {
     public func getMovieRecommendations(by id: Int, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
         remote.getMovieRecommendations(by: id, completionHandler: completionHandler)
     }
+    
+    public  func insertMovies(movies: [Movie], completionHandler: @escaping (Result<Bool, AppError>) -> Void) {
+        local.insertMovies(movies: movies, completionHandler: completionHandler)
+    }
+    
+    public func getMovies(completionHandler: @escaping (Result<[Movie], AppError>) -> Void) {
+        local.getMovies(completionHandler: completionHandler)
+    }
+    
+    public func countMovies(sortedAs: String, completionHandler: @escaping (Result<Int, AppError>) -> Void) {
+        local.countMovies(sortedAs: sortedAs, completionHandler: completionHandler)
+    }
+    
 }
 

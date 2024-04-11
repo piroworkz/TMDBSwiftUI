@@ -10,7 +10,7 @@ import domain
 import data
 
 
-class RemoteMoviesDataSource: MoviesDataSource {
+class RemoteMoviesDataSource: MoviesRemoteDataSource {
     
     private let client: HttpClient
     
@@ -18,10 +18,10 @@ class RemoteMoviesDataSource: MoviesDataSource {
         self.client = HttpClient.shared
     }
     
-    func getMovies(endpoint: String, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
+    func fectchMovies(endpoint: String, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
         client.get(NetworkResponse.self, endpoint: endpoint) { result in
             result.fold { networkResponse in
-                guard let movies = networkResponse?.results.map({ movie in movie.toDomain()})
+                guard let movies = networkResponse?.results.map({ movie in movie.toDomain(sortAs: endpoint)})
                 else { completionHandler(.failure(AppError.notAvailable())); return }
                 completionHandler(.success(movies))
             } onFailure: { appError in
@@ -59,7 +59,7 @@ class RemoteMoviesDataSource: MoviesDataSource {
     func getMovieRecommendations(by id: Int, completionHandler: @escaping(_ result: Result<[Movie], AppError>) -> Void) {
         client.get(NetworkResponse.self, endpoint: "\(id)/recommendations") { result in
             result.fold { networkResponse in
-                guard let movies = networkResponse?.results.map({ movie in movie.toDomain()})
+                guard let movies = networkResponse?.results.map({ movie in movie.toDomain(sortAs: "")})
                 else { completionHandler(.failure(AppError.notAvailable())); return }
                 completionHandler(.success(movies))
             } onFailure: { appError in

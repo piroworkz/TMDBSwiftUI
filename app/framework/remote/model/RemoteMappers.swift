@@ -9,11 +9,12 @@ import Foundation
 import domain
 
 extension RemoteMovie {
-    func toDomain() -> Movie {
+    func toDomain(sortAs: String) -> Movie {
         Movie(
             id: self.id,
             posterPath: self.poster_path.buildThumbPath(),
-            title: self.title .orEmpty()
+            title: self.title .orEmpty(),
+            sortAs: sortAs
         )
     }
 }

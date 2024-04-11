@@ -10,7 +10,6 @@ import SwiftUI
 @main
 struct TMDBSwiftUIApp: App {
     
-    
     var body: some Scene {
         WindowGroup {
             Navigator()
